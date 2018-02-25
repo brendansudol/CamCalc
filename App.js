@@ -1,22 +1,11 @@
 import React, { Component } from 'react'
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu'
-})
+import { GOOGLE_API_KEY } from './env.config'
 
 const fetchLabels = async base64 => {
-  const url = 'https://vision.googleapis.com/v1/images:annotate?key=API_KEY'
+  const url = `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_API_KEY}`
   const data = {
     method: 'POST',
     body: JSON.stringify({

@@ -49,3 +49,5 @@ buck-out/
 
 # misc
 .env
+
+env.config.js
