@@ -15,12 +15,35 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu'
 })
 
+const fetchLabels = async base64 => {
+  const url = 'https://vision.googleapis.com/v1/images:annotate?key=API_KEY'
+  const data = {
+    method: 'POST',
+    body: JSON.stringify({
+      requests: [
+        {
+          image: { content: base64 },
+          features: [{ type: 'LABEL_DETECTION' }]
+        }
+      ]
+    })
+  }
+
+  return await fetch(url, data).then(
+    response => response.json(),
+    err => console.error(err)
+  )
+}
+
 class App extends Component {
-  takePicture = async function() {
+  takePicture = async () => {
     if (this.camera) {
       const options = { quality: 0.5, base64: true }
       const data = await this.camera.takePictureAsync(options)
-      console.log(data.uri)
+      console.warn(data.uri)
+
+      let result = await fetchLabels(data.base64)
+      console.log(result)
     }
   }
 
@@ -39,14 +62,9 @@ class App extends Component {
             'We need your permission to use your camera phone'
           }
         />
-        <View
-          style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}
-        >
-          <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style={styles.capture}
-          >
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
+        <View style={styles.captureHolder}>
+          <TouchableOpacity onPress={this.takePicture} style={styles.capture}>
+            <Text style={{ fontSize: 14 }}>SNAP</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -64,6 +82,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center'
+  },
+  captureHolder: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   capture: {
     flex: 0,
