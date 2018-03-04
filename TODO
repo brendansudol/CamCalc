@@ -1,0 +1,7 @@
+happy path:
+
+1. snap picture
+2. encode pic, send to mathpix api
+3. mathpix results (json) to wolfram api
+4. parse wolfram results (xml)
+5. show results on screenshots
